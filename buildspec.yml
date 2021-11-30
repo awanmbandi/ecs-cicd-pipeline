@@ -7,21 +7,20 @@ phases:
       - aws --version
       - echo $AWS_DEFAULT_REGION
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=<<your-account-id>>.dkr.ecr.eu-central-1.amazonaws.com/ecr-simplehttp
+      - REPOSITORY_URI=503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build -t 503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp:latest .
+      - docker tag 503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp:latest 503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - printf '[{"name":"simplehttp-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
+      - docker push 503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp:latest
+      - docker push 503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp:$IMAGE_TAG
+      - printf '[{"name":"http-container-app","imageUri":"%s"}]' 503868045399.dkr.ecr.us-west-2.amazonaws.com/ecr-simplehttp:$IMAGE_TAG > imagedefinitions.json
 artifacts:
-    files: imageDetail.json
+    files: imagedefinitions.json
